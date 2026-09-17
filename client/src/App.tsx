@@ -3,6 +3,8 @@ import Navbar from "./components/Navbar"
 import TodoForm from "./components/TodoForm"
 import TodoList from "./components/TodoList "
 
+export const API_URL = import.meta.env.VITE_API_URL;
+
 
 function App() {
 

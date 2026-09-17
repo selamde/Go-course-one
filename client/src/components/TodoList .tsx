@@ -1,46 +1,26 @@
-import { Box, Button, Spinner, Stack } from "@chakra-ui/react"
+import { Box, Spinner, Stack } from "@chakra-ui/react"
 import { useQuery } from "@tanstack/react-query"
 
-import { FaCheckCircle, FaTrash } from "react-icons/fa"
+import Todoitem from "./Todoitem"
+import { API_URL } from "../App"
 
-const sampleData = [
-    {
-        id:1,
-        body: "Learn golang",
-        completed: true
-    },
-        {
-        id:1,
-        body: "Learn python",
-        completed: false
-    },
-        {
-        id:1,
-        body: "Learn scala",
-        completed: true
-    },
-        {
-        id:1,
-        body: "Learn ruby",
-        completed: false
-    },
-]
+
+
 export type Todo = {
-  _id:number
+  id:string
   body:string
   completed:boolean
 } 
 
 
-const TodoList  = ({todo} : {todo: Todo}) => {
-  // const [isLoading, setIsLoading] = useState(false)
-  // const[todosData, setTodosData] = useState([]);
+const TodoList  = () => {
+
  const {data:todos,isLoading } = useQuery<Todo[]>({
    
     queryKey:["todos"],
     queryFn: async ()=>{
       try{
-      const res = await fetch("http://localhost:5000/api/todos");
+      const res = await fetch(`${API_URL}`);
       const data = await res.json();
       
       if(!res.ok){
@@ -53,7 +33,8 @@ const TodoList  = ({todo} : {todo: Todo}) => {
 
     }
 
-    }
+    },
+    staleTime: 1000 * 60 * 5
     
   })
   return (
@@ -61,30 +42,21 @@ const TodoList  = ({todo} : {todo: Todo}) => {
   <Box className="flex justify-center items-center !mt-10 !mb-8">
     <h1 className="!text-5xl !font-extrabold">Today&apos;s Task </h1>
   </Box>
-  <Stack className="!mx-90">
+  <Stack className="md:!mx-90">
 {
   isLoading ? <Spinner /> : (
-    todos?.map((todo)=>(
-
- <div  key={todo._id} className=" flex items-center gap-2">
-     <Box className=" flex flex-2 justify-between items-center !border !rounded-md !py-2 !px-4">
-    <div>{todo.completed? (<del>{todo.body}</del>) :(<p>{todo.body}</p>)}</div>
-    <span className={`!py-1 !px-2 ${todo.completed? "bg-green-500 " : "bg-yellow-500"}`}>{todo.completed ? "Done" : "In Progress"}</span>
-  </Box>
-  <div className="!flex !flex-row gap-2"
-  
-  
-  >
-      <Button bg={"white"}><FaCheckCircle className="text-green-700  !w-7 !h-7" /></Button>
-      <Button bg={"white"}  ><FaTrash className="text-red-700 !w-7 !h-7" /></Button>
-
-  </div>
-
+    todos?.map((todo)=>{
+    console.log("TODO:", todo);
+  console.log("TODO ID:", todo.id);
+      return(
+          <Todoitem key={todo.id} id={todo.id} body={todo.body} completed={todo.completed} />
  
+      )
+    }
 
- </div>
+    
  
-    ))
+    )
   )
 }
   </Stack>
