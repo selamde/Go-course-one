@@ -44,7 +44,7 @@ const TodoList  = () => {
   </Box>
   <Stack className="md:!mx-90">
 {
-  isLoading ? <Spinner /> : (
+  isLoading ? <Spinner /> : todos?.length === 0 ?(<p>No todos yet</p>): (
     todos?.map((todo)=>{
     console.log("TODO:", todo);
   console.log("TODO ID:", todo.id);
