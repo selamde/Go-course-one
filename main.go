@@ -39,6 +39,9 @@ func main() {
 
 	MONGODB_URI := os.Getenv("MONGODB_URI")
 	PORT := os.Getenv("PORT")
+	if PORT == "" {
+		PORT = "5000"
+	}
 
 	//connect to the database
 	clientoptions := options.Client().ApplyURI(MONGODB_URI)
