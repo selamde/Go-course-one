@@ -67,6 +67,7 @@ func main() {
 		AllowHeaders: "origins, Content-Type, Accept",
 	}))
 
+	//means your Go/Fiber server can serve the already-built React files
 	if (os.Getenv("ENV")) == "production" {
 		app.Static(".", "./client/dist")
 	}
@@ -76,7 +77,7 @@ func main() {
 	app.Patch("/api/todos/:id", updateTodo)
 	app.Delete("/api/todos/:id", deleteTodo)
 
-	log.Fatal(app.Listen(":" + PORT))
+	// log.Fatal(app.Listen(":" + PORT))
 	log.Fatal(app.Listen("0.0.0.0:" + PORT))
 
 }
