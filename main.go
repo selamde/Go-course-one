@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -25,10 +24,10 @@ var collection *mongo.Collection
 
 func main() {
 	//load the .env file
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// err := godotenv.Load("ENV")
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
 
 	if os.Getenv("ENV") != "production" {
 		err := godotenv.Load(".env")
@@ -62,14 +61,16 @@ func main() {
 	collection = client.Database("golang_db").Collection("todos")
 
 	app := fiber.New()
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:5173",
-		AllowHeaders: "origins, Content-Type, Accept",
-	}))
+	//we dont need cors if the frontend and go are on the same domain
+	// app.Use(cors.New(cors.Config{
+	// 	// AllowOrigins: "http://localhost:5173",
+	// 	AllowOrigins: "*",
+	// 	AllowHeaders: "origins, Content-Type, Accept",
+	// }))
 
 	//means your Go/Fiber server can serve the already-built React files
 	if (os.Getenv("ENV")) == "production" {
-		app.Static(".", "./client/dist")
+		app.Static("/", "./client/dist")
 	}
 	app.Get("/api/todos", getTodos)
 	app.Get("/api/todos/:id", getSignleTodo)

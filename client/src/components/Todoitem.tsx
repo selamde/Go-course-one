@@ -42,7 +42,7 @@ const Todoitem = ({id, body, completed}: TodoItemProps) => {
                     }
                 )
                 if(!res.ok){
-                    throw new Error("Faield to delete the todo!")
+                    throw new Error("Failed to delete the todo!")
                 }
                 
                 return res.json()
